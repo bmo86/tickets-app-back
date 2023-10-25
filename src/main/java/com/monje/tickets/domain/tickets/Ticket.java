@@ -1,11 +1,9 @@
 package com.monje.tickets.domain.tickets;
 
-
 import com.monje.tickets.domain.tickets.dto.DataRegisterTicket;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -34,4 +32,9 @@ public class Ticket {
         this.status = data.status();
         this.active = data.active();
     }
+
+    public void updateActive() {
+        this.active = !this.active;
+    }
+
 }
