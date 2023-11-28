@@ -13,4 +13,4 @@ The "tickets-app-back" project is an API designed to facilitate CRUD operations 
 ## Technology
 - Java
 - Mongo DB
-- [Frontend] (https://github.com/bmo86/tickets-app-front)
+- [Frontend](https://github.com/bmo86/tickets-app-front)
