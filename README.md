@@ -9,3 +9,8 @@ The "tickets-app-back" project is an API designed to facilitate CRUD operations 
 - Update Ticket: Allows the modification of the information of an existing ticket, which may include changes in the status, assignment, or any other data associated with the ticket.
 
 - Delete Ticket: Offers the possibility of deleting tickets from the system, providing functionality to manage the life cycle of tickets.
+
+## Technology
+- Java
+- Mongo DB
+- [Frontend] (https://github.com/bmo86/tickets-app-front)
