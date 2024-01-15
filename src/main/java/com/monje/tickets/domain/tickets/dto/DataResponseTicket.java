@@ -8,23 +8,25 @@ public record DataResponseTicket(
         String id,
         String tittle,
         String description,
+        String category,
         Number priority,
         Number progress,
         String status,
-        boolean active,
-        Date createdAt
+        Date createdAt,
+        Date updateAt
 ) {
 
     public DataResponseTicket(Ticket ticket) {
         this(
                 ticket.getId(),
-                ticket.getTittle(),
+                ticket.getTitle(),
                 ticket.getDescription(),
+                ticket.getCategory(),
                 ticket.getPriority(),
                 ticket.getProgress(),
                 ticket.getStatus(),
-                ticket.isActive(),
-                ticket.getCreatedAt()
+                ticket.getCreatedAt(),
+                ticket.getUpdateAt()
         );
     }
 }

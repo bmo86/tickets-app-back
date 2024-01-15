@@ -1,0 +1,4 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb+srv://admin:gBE5CvhJX2CMOawC@cluster0.s3dt8ui.mongodb.net/TicketDB

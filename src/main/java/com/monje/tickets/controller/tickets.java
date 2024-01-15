@@ -1,10 +1,13 @@
 package com.monje.tickets.controller;
 
+import com.mongodb.lang.NonNull;
 import com.monje.tickets.domain.tickets.Ticket;
 import com.monje.tickets.domain.tickets.dto.DataRegisterTicket;
 import com.monje.tickets.domain.tickets.dto.DataResponseTicket;
 import com.monje.tickets.domain.tickets.repo.RepoTicket;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +18,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/tickets")
 public class tickets {
@@ -26,13 +30,14 @@ public class tickets {
         Ticket ticket = repoTicket.save(new Ticket(data));
         DataResponseTicket response = new DataResponseTicket(
                 ticket.getId(),
-                ticket.getTittle(),
+                ticket.getTitle(),
                 ticket.getDescription(),
+                ticket.getCategory(),
                 ticket.getPriority(),
                 ticket.getProgress(),
                 ticket.getStatus(),
-                ticket.isActive(),
-                ticket.getCreatedAt()
+                ticket.getCreatedAt(),
+                ticket.getUpdateAt()
         );
 
         URI url = uriComponentsBuilder.path("/tickets/{id}").buildAndExpand(ticket.getId()).toUri();
@@ -41,7 +46,7 @@ public class tickets {
 
     @GetMapping
     public ResponseEntity<Page<DataResponseTicket>> getTickets(@PageableDefault Pageable pageable){
-        return ResponseEntity.ok(repoTicket.findByActiveTrue(pageable).map(DataResponseTicket::new));
+        return ResponseEntity.ok(repoTicket.findAll(pageable).map(DataResponseTicket::new));
     }
 
     @GetMapping("/{id}")
@@ -49,13 +54,14 @@ public class tickets {
         Ticket ticket = repoTicket.findById(id).orElseThrow(() -> new RuntimeException("Ticket not found " + id));
         var response = new DataResponseTicket(
                 ticket.getId(),
-                ticket.getTittle(),
+                ticket.getTitle(),
                 ticket.getDescription(),
+                ticket.getCategory(),
                 ticket.getPriority(),
                 ticket.getProgress(),
                 ticket.getStatus(),
-                ticket.isActive(),
-                ticket.getCreatedAt()
+                ticket.getCreatedAt(),
+                ticket.getUpdateAt()
         );
         return ResponseEntity.ok(response);
     }
@@ -63,8 +69,18 @@ public class tickets {
     @DeleteMapping("/{id}")
     public ResponseEntity<DataResponseTicket> deleteTicket(@PathVariable @Valid String id) {
         Ticket ticket = repoTicket.findById(id).orElseThrow(() -> new RuntimeException("Ticket not found " + id));
-        ticket.updateActive();
-        return ResponseEntity.ok().build();
+        var res = new DataResponseTicket(
+                ticket.getId(),
+                ticket.getTitle(),
+                ticket.getDescription(),
+                ticket.getCategory(),
+                ticket.getPriority(),
+                ticket.getProgress(),
+                ticket.getStatus(),
+                ticket.getCreatedAt(),
+                ticket.getUpdateAt()
+        );
+        return ResponseEntity.ok(res);
     }
-
+    
 }

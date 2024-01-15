@@ -16,25 +16,23 @@ import java.util.Date;
 public class Ticket {
     @Id
     private String id;
-    private String tittle;
+    private String title;
     private String description;
+    private String category;
     private Number priority;
     private Number progress;
     private String status;
-    private boolean active;
     private Date createdAt = new Date();
-
+    private Date updateAt = new Date();
     public Ticket(DataRegisterTicket data) {
-        this.tittle = data.tittle();
+        this.title = data.title();
         this.description = data.description();
+        this.category = data.category();
         this.priority = data.priority();
         this.progress = data.progress();
         this.status = data.status();
-        this.active = data.active();
     }
 
-    public void updateActive() {
-        this.active = !this.active;
-    }
+
 
 }
