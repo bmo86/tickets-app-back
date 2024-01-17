@@ -1,4 +1,4 @@
 spring:
   data:
     mongodb:
-      uri: mongodb+srv://admin:gBE5CvhJX2CMOawC@cluster0.s3dt8ui.mongodb.net/TicketDB
+      uri: mongodb+srv://admin:kG2Q1xwC32q1rkXI@cluster0.s3dt8ui.mongodb.net/TicketDB
