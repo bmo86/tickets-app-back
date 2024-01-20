@@ -2,8 +2,10 @@ package com.monje.tickets.controller;
 
 import com.mongodb.lang.NonNull;
 import com.monje.tickets.domain.tickets.Ticket;
+import com.monje.tickets.domain.tickets.dto.DataMessage;
 import com.monje.tickets.domain.tickets.dto.DataRegisterTicket;
 import com.monje.tickets.domain.tickets.dto.DataResponseTicket;
+import com.monje.tickets.domain.tickets.dto.DataUpdateTicket;
 import com.monje.tickets.domain.tickets.repo.RepoTicket;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -13,10 +15,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -45,7 +49,7 @@ public class tickets {
     }
 
     @GetMapping
-    public ResponseEntity<Page<DataResponseTicket>> getTickets(@PageableDefault Pageable pageable){
+    public ResponseEntity<Page<DataResponseTicket>> getTickets(@PageableDefault Pageable pageable) {
         return ResponseEntity.ok(repoTicket.findAll(pageable).map(DataResponseTicket::new));
     }
 
@@ -67,20 +71,33 @@ public class tickets {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<DataResponseTicket> deleteTicket(@PathVariable @Valid String id) {
-        Ticket ticket = repoTicket.findById(id).orElseThrow(() -> new RuntimeException("Ticket not found " + id));
-        var res = new DataResponseTicket(
-                ticket.getId(),
-                ticket.getTitle(),
-                ticket.getDescription(),
-                ticket.getCategory(),
-                ticket.getPriority(),
-                ticket.getProgress(),
-                ticket.getStatus(),
-                ticket.getCreatedAt(),
-                ticket.getUpdateAt()
-        );
-        return ResponseEntity.ok(res);
+    public ResponseEntity<DataMessage> deleteTicket(@PathVariable @Valid String id) {
+
+        if (repoTicket.findById(id).isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        repoTicket.deleteById(id);
+        return ResponseEntity.ok(new DataMessage("Delete Ticket"));
     }
-    
+
+    @PutMapping("/{id}")
+    @Transactional
+    public ResponseEntity<DataResponseTicket> updateTicket(@RequestBody @Valid DataUpdateTicket data, @PathVariable @Valid String id) {
+        Optional<Ticket> ticket = repoTicket.findById(id);
+        ticket.get().updateTicket(data);
+        repoTicket.save(ticket.get());
+        return ResponseEntity.ok(new DataResponseTicket(
+                ticket.get().getId(),
+                ticket.get().getTitle(),
+                ticket.get().getDescription(),
+                ticket.get().getCategory(),
+                ticket.get().getPriority(),
+                ticket.get().getProgress(),
+                ticket.get().getStatus(),
+                ticket.get().getCreatedAt(),
+                ticket.get().getUpdateAt()
+        ));
+    }
+
+
 }

@@ -1,6 +1,7 @@
 package com.monje.tickets.domain.tickets;
 
 import com.monje.tickets.domain.tickets.dto.DataRegisterTicket;
+import com.monje.tickets.domain.tickets.dto.DataUpdateTicket;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,6 +25,7 @@ public class Ticket {
     private String status;
     private Date createdAt = new Date();
     private Date updateAt = new Date();
+
     public Ticket(DataRegisterTicket data) {
         this.title = data.title();
         this.description = data.description();
@@ -33,6 +35,31 @@ public class Ticket {
         this.status = data.status();
     }
 
+    public void updateTicket(DataUpdateTicket data) {
+        if (data.title() != null) {
+            this.title = data.title();
+        }
+
+        if (data.description() != null) {
+            this.description = data.description();
+        }
+
+        if (data.category() != null) {
+            this.category = data.category();
+        }
+
+        if (data.priority() != null) {
+            this.priority = data.priority();
+        }
+
+        if (data.progress() != null) {
+            this.progress = data.progress();
+        }
+
+        if (data.status() != null) {
+            this.status = data.status();
+        }
+    }
 
 
 }
